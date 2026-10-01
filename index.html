@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Philip Nkwam - computational imaging researcher working on reconstruction, uncertainty quantification and deep learning for quantitative PET and MRI, and on the tools and training that let African researchers run that science themselves.">
+<meta name="author" content="Philip Nkwam">
+<link rel="canonical" href="https://nkwamphilip.github.io/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Philip Nkwam">
+<meta property="og:description" content="Quantitative brain imaging - reconstruction, uncertainty quantification and deep learning for PET and MRI.">
+<meta property="og:url" content="https://nkwamphilip.github.io/">
+<meta property="og:image" content="https://nkwamphilip.github.io/img/pet-desk.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231A3C68'/%3E%3Ccircle cx='16' cy='16' r='8' fill='none' stroke='%23C2711A' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%23B8401E'/%3E%3C/svg%3E">
+
+<title>Philip Nkwam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+/* Layout: asymmetric scholarly grid — a narrow mono rail carries section indices and
+   metadata the way a journal carries margin notes; content sits in the wide column.
+   Colour is taken from the PET hot scale: indigo for structure, amber for intensity. */
+:root{
+  --bg:#F5F7F9; --surface:#FFFFFF; --surface-2:#EBEFF4; --surface-3:#E2E8EF;
+  --fg:#141821; --muted:#596273; --faint:#8D97A8; --rule:#DCE2EA;
+  --primary:#1A3C68; --primary-soft:#2C5894; --accent:#C2711A; --hot:#B8401E;
+  --shadow:0 1px 2px rgba(20,30,50,.05), 0 8px 24px -12px rgba(20,30,50,.18);
+  --font-display:'Newsreader',Georgia,'Times New Roman',serif;
+  --font-body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  --maxw:1180px;
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --bg:#0E1117; --surface:#161B23; --surface-2:#1C222C; --surface-3:#232A36;
+  --fg:#E7EBF1; --muted:#98A2B4; --faint:#6E7889; --rule:#272E3A;
+  --primary:#8FB3E0; --primary-soft:#A8C5EA; --accent:#E0A058; --hot:#E0714A;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0E1117; --surface:#161B23; --surface-2:#1C222C; --surface-3:#232A36;
+  --fg:#E7EBF1; --muted:#98A2B4; --faint:#6E7889; --rule:#272E3A;
+  --primary:#8FB3E0; --primary-soft:#A8C5EA; --accent:#E0A058; --hot:#E0714A;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font-body);
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:var(--primary);text-decoration:none}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:400;text-wrap:balance;margin:0;letter-spacing:-.01em}
+p{margin:0}
+
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:20px}
+.mono{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--faint)}
+
+/* ---------- top bar ---------- */
+#top{position:sticky;top:env(safe-area-inset-top,0px);z-index:60;background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+#top .wrap{display:flex;align-items:center;gap:18px;padding-block:11px}
+#top .nm{font-family:var(--font-display);font-size:1.02rem;letter-spacing:-.01em;color:var(--fg);margin-right:auto}
+#top nav{display:flex;gap:18px}
+#top nav a{font-size:.83rem;color:var(--muted);padding-block:3px;border-bottom:1.5px solid transparent}
+#top nav a:hover{color:var(--fg);border-bottom-color:var(--accent)}
+#themeBtn{background:none;border:1px solid var(--rule);border-radius:999px;width:30px;height:30px;
+  cursor:pointer;color:var(--muted);display:grid;place-items:center;flex:none;padding:0}
+#themeBtn:hover{color:var(--fg);border-color:var(--faint)}
+@media (max-width:760px){ #top nav{display:none} }
+
+/* ---------- hero ---------- */
+#hero{border-bottom:1px solid var(--rule);background:
+  radial-gradient(1100px 420px at 88% -12%, color-mix(in srgb,var(--primary) 9%,transparent), transparent 70%),
+  var(--bg)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:52px;
+  align-items:center;padding-block:62px 56px}
+.eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--hot);flex:none}
+h1{font-size:clamp(2.5rem,6.2vw,4rem);line-height:1.02;font-weight:400;letter-spacing:-.025em}
+h1 em{font-style:italic;color:var(--primary)}
+.lede{font-size:1.1rem;color:var(--muted);margin-top:22px;max-width:46ch}
+.lede strong{color:var(--fg);font-weight:500}
+.hero-links{display:flex;flex-wrap:wrap;gap:9px;margin-top:30px}
+.chip{font-family:var(--font-mono);font-size:.74rem;letter-spacing:.04em;padding:7px 13px;border:1px solid var(--rule);
+  border-radius:999px;background:var(--surface);color:var(--muted);transition:.18s}
+.chip:hover{color:var(--fg);border-color:var(--primary);transform:translateY(-1px);box-shadow:var(--shadow)}
+.affil{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:30px;padding-top:20px;border-top:1px solid var(--rule)}
+.affil span{font-size:.82rem;color:var(--faint)}
+@media (max-width:900px){ .hero-grid{grid-template-columns:1fr;gap:38px;padding-block:40px} }
+
+/* ---------- dose figure ---------- */
+.figure{background:var(--surface);border:1px solid var(--rule);border-radius:4px;overflow:hidden;box-shadow:var(--shadow)}
+.figure .cap{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+  padding:11px 14px;border-bottom:1px solid var(--rule);background:var(--surface-2)}
+.figure .body{padding:14px}
+#doseCanvas{width:100%;height:auto;aspect-ratio:1/1;background:#06080f;border-radius:3px;display:block;cursor:ew-resize;touch-action:none}
+.readout{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:12px;background:var(--rule);
+  border:1px solid var(--rule);border-radius:3px;overflow:hidden}
+.readout div{background:var(--surface);padding:9px 10px}
+.readout .k{font-family:var(--font-mono);font-size:.63rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.readout .v{font-family:var(--font-mono);font-size:1.02rem;font-weight:500;color:var(--fg);font-variant-numeric:tabular-nums;margin-top:3px}
+.readout .v.warn{color:var(--hot)}
+.slider-row{display:flex;align-items:center;gap:12px;margin-top:14px}
+.slider-row label{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);flex:none}
+input[type=range]{flex:1;min-width:0;accent-color:var(--accent);height:22px;cursor:ew-resize}
+.fignote{font-size:.74rem;color:var(--faint);margin-top:11px;line-height:1.5}
+
+/* ---------- sections ---------- */
+section{border-bottom:1px solid var(--rule)}
+.sec{display:grid;grid-template-columns:132px minmax(0,1fr);gap:40px;padding-block:66px}
+.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 70px);align-self:start}
+.rail .idx{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;color:var(--hot)}
+.rail h2{font-size:1.18rem;margin-top:7px;line-height:1.25}
+.rail .sub{font-size:.78rem;color:var(--faint);margin-top:8px;line-height:1.45}
+@media (max-width:860px){
+  .sec{grid-template-columns:1fr;gap:26px;padding-block:46px}
+  .rail{position:static}
+  .rail h2{font-size:1.5rem}
+}
+
+/* ---------- research ---------- */
+.proj{border-top:1px solid var(--rule);padding-block:26px}
+.proj:first-child{border-top:none;padding-top:0}
+.proj-head{display:flex;gap:16px;align-items:flex-start;cursor:pointer;background:none;border:none;
+  padding:0;width:100%;text-align:left;font:inherit;color:inherit}
+.proj-head:hover h3{color:var(--primary)}
+.proj-head .yr{font-family:var(--font-mono);font-size:.72rem;color:var(--faint);flex:none;padding-top:7px;width:84px}
+.proj-head .ttl{flex:1;min-width:0}
+.proj-head h3{font-size:1.4rem;line-height:1.22;transition:color .18s}
+.proj-head .sum{color:var(--muted);font-size:.95rem;margin-top:7px}
+.proj-head .tog{flex:none;width:26px;height:26px;border:1px solid var(--rule);border-radius:50%;
+  display:grid;place-items:center;color:var(--muted);margin-top:5px;transition:.2s;font-size:.9rem;line-height:1}
+.proj-head[aria-expanded="true"] .tog{transform:rotate(45deg);border-color:var(--primary);color:var(--primary)}
+.proj-body{padding-left:100px;padding-top:4px}
+.proj-body ul{margin:14px 0 0;padding-left:0;list-style:none;display:grid;gap:10px}
+.proj-body li{position:relative;padding-left:18px;font-size:.93rem;color:var(--muted)}
+.proj-body li::before{content:"";position:absolute;left:0;top:.62em;width:7px;height:1.5px;background:var(--accent)}
+.proj-body li b{color:var(--fg);font-weight:500}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.tag{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.05em;padding:3px 8px;border-radius:3px;
+  background:var(--surface-2);color:var(--muted);border:1px solid var(--rule)}
+@media (max-width:640px){
+  .proj-head .yr{display:none}
+  .proj-body{padding-left:0}
+}
+
+/* ---------- photos ---------- */
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(188px,1fr));gap:12px;margin-top:4px}
+.gal figure{margin:0;position:relative;overflow:hidden;border-radius:3px;background:var(--surface-2);
+  border:1px solid var(--rule);cursor:zoom-in;aspect-ratio:4/3}
+.gal img{width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.2,.7,.3,1)}
+.gal figure:hover img{transform:scale(1.045)}
+.gal figcaption{position:absolute;inset:auto 0 0 0;padding:26px 11px 10px;font-size:.76rem;line-height:1.35;color:#fff;
+  background:linear-gradient(to top,rgba(8,12,20,.9),rgba(8,12,20,.55) 55%,transparent);
+  transform:translateY(0);transition:.28s}
+.gal figcaption b{display:block;font-weight:500}
+.gal figcaption span{color:rgba(255,255,255,.72);font-size:.7rem}
+.gal figure.tall{aspect-ratio:3/4}
+.gal figure.wide{grid-column:span 2;aspect-ratio:16/9}
+@media (max-width:520px){ .gal figure.wide{grid-column:span 1;aspect-ratio:4/3} }
+
+/* lightbox */
+#lb{position:fixed;inset:0;z-index:100;background:rgba(8,11,17,.94);display:grid;place-items:center;padding:24px}
+#lb img{max-width:min(1100px,94vw);max-height:84vh;width:auto;border-radius:3px;object-fit:contain}
+#lb .lbcap{color:#E7EBF1;font-size:.86rem;text-align:center;margin-top:14px;max-width:62ch}
+#lb .lbcap span{display:block;color:rgba(231,235,241,.62);font-size:.76rem;margin-top:3px}
+#lbClose{position:absolute;top:16px;right:18px;background:none;border:1px solid rgba(255,255,255,.3);color:#fff;
+  width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:1.1rem;line-height:1}
+#lbClose:hover{background:rgba(255,255,255,.12)}
+
+/* ---------- publications ---------- */
+.filters{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:22px}
+.fbtn{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;padding:6px 12px;
+  border:1px solid var(--rule);border-radius:999px;background:var(--surface);color:var(--muted);cursor:pointer;transition:.16s}
+.fbtn:hover{border-color:var(--faint);color:var(--fg)}
+.fbtn[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:var(--surface)}
+.pub{display:grid;grid-template-columns:30px minmax(0,1fr);gap:14px;padding-block:17px;border-top:1px solid var(--rule)}
+.pub .n{font-family:var(--font-mono);font-size:.72rem;color:var(--faint);padding-top:3px;font-variant-numeric:tabular-nums}
+.pub .t{font-size:.98rem;line-height:1.45;color:var(--fg)}
+.pub .t a{border-bottom:1px solid color-mix(in srgb,var(--primary) 35%,transparent)}
+.pub .t a:hover{border-bottom-color:var(--primary)}
+.pub .au{font-size:.85rem;color:var(--muted);margin-top:5px}
+.pub .au b{color:var(--fg);font-weight:600}
+.pub .ven{font-family:var(--font-mono);font-size:.74rem;color:var(--faint);margin-top:6px}
+.pub .ven .em{color:var(--accent)}
+.badge{display:inline-block;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;
+  padding:2px 7px;border-radius:3px;margin-right:7px;vertical-align:1px}
+.b-pr{background:color-mix(in srgb,var(--primary) 14%,transparent);color:var(--primary)}
+.b-rev{background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent)}
+.pubcount{font-family:var(--font-mono);font-size:.72rem;color:var(--faint);margin-top:18px}
+
+/* ---------- leadership ---------- */
+.lead{display:grid;gap:14px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:20px 22px;transition:.2s}
+.card:hover{border-color:color-mix(in srgb,var(--primary) 40%,var(--rule));box-shadow:var(--shadow);transform:translateY(-2px)}
+.card h3{font-size:1.18rem}
+.card .org{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:7px}
+.card p{font-size:.93rem;color:var(--muted);margin-top:9px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:1px;background:var(--rule);
+  border:1px solid var(--rule);border-radius:4px;overflow:hidden;margin-top:18px}
+.stats div{background:var(--surface);padding:14px 13px}
+.stats .f{font-family:var(--font-mono);font-size:1.4rem;font-weight:500;color:var(--fg);font-variant-numeric:tabular-nums;line-height:1}
+.stats .l{font-size:.75rem;color:var(--muted);margin-top:6px;line-height:1.35}
+
+/* ---------- talks / list ---------- */
+.rows{display:grid}
+.row{display:grid;grid-template-columns:104px minmax(0,1fr);gap:16px;padding-block:14px;border-top:1px solid var(--rule);align-items:baseline}
+.row .w{font-family:var(--font-mono);font-size:.72rem;color:var(--faint)}
+.row .c{font-size:.94rem}
+.row .c i{font-style:italic;color:var(--muted)}
+.row .c .s{display:block;font-size:.83rem;color:var(--muted);margin-top:3px}
+@media (max-width:560px){ .row{grid-template-columns:1fr;gap:3px} }
+
+/* ---------- contact ---------- */
+#contact .sec{padding-block:60px}
+.ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 19px;border-radius:3px;font-size:.9rem;
+  border:1px solid var(--primary);color:var(--primary);background:var(--surface);transition:.18s}
+.btn:hover{background:var(--primary);color:var(--surface);transform:translateY(-1px)}
+.btn.solid{background:var(--primary);color:var(--surface)}
+.btn.solid:hover{filter:brightness(1.12)}
+.mailrow{display:flex;align-items:center;gap:10px;margin-top:18px;flex-wrap:wrap}
+.mailrow code{font-family:var(--font-mono);font-size:.9rem;background:var(--surface-2);border:1px solid var(--rule);
+  padding:7px 11px;border-radius:3px;color:var(--fg);user-select:all}
+#copyBtn{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;padding:7px 12px;
+  border:1px solid var(--rule);background:var(--surface);color:var(--muted);border-radius:3px;cursor:pointer}
+#copyBtn:hover{color:var(--fg);border-color:var(--faint)}
+footer{padding-block:28px;color:var(--faint);font-size:.8rem;display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center}
+footer .sp{margin-left:auto}
+
+/* ---------- motion ---------- */
+.js .reveal{transform:translateY(14px);transition:transform .6s cubic-bezier(.22,.7,.25,1)}
+.js .reveal.in{transform:none}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .js .reveal{transform:none}
+}
+</style>
+
+<style>
+/* baseline reset (the hosted preview supplies this; a standalone page needs it) */
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div id="top"><div class="wrap">
+  <span class="nm">Philip Nkwam</span>
+  <nav>
+    <a href="#research">Research</a>
+    <a href="#ucl">UCL</a>
+    <a href="#publications">Publications</a>
+    <a href="#leadership">Leadership</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <button id="themeBtn" title="Switch theme" aria-label="Switch colour theme">◐</button>
+</div></div>
+
+<section id="hero"><div class="wrap hero-grid">
+  <div>
+    <div class="eyebrow"><span class="dot"></span><span class="mono">Computational imaging &middot; Lagos, Nigeria</span></div>
+    <h1>Making quantitative brain imaging work <em>where the scanners aren't</em>.</h1>
+    <p class="lede">I work on reconstruction, uncertainty quantification and deep learning for
+      <strong>PET and MRI</strong> — and on the tools and training that let African researchers
+      run that science themselves.</p>
+    <div class="hero-links">
+      <a class="chip" href="https://scholar.google.ca/citations?hl=en&user=UDNxJ8oAAAAJ" target="_blank" rel="noopener">Google Scholar</a>
+      <a class="chip" href="https://www.researchgate.net/profile/Philip-Nkwam" target="_blank" rel="noopener">ResearchGate</a>
+      <a class="chip" href="https://www.linkedin.com/in/nkwam-philip/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="chip" href="https://webmriqc.mailab.io/" target="_blank" rel="noopener">WebMRIQC ↗</a>
+    </div>
+    <div class="affil">
+      <span>UCL Hawkes Institute &amp; Queen Square Institute of Neurology <em>(visiting, 2026)</em></span>
+      <span>MAILAB, Lagos</span>
+      <span>CAMERA MRI Africa</span>
+      <span>Alzheimer's Association ISTAART</span>
+    </div>
+  </div>
+
+  <div class="figure reveal">
+    <div class="cap">
+      <span class="mono">Fig. 1 — Dose &amp; noise</span>
+      <span class="mono" style="color:var(--accent)">Drag</span>
+    </div>
+    <div class="body">
+      <canvas id="doseCanvas" width="420" height="420" role="img"
+        aria-label="Interactive simulation of an amyloid PET slice reconstructed at varying injected dose"></canvas>
+      <div class="slider-row">
+        <label for="doseRange">Dose</label>
+        <input id="doseRange" type="range" min="2" max="100" value="100" step="1" aria-label="Simulated injected dose, percent">
+      </div>
+      <div class="readout">
+        <div><div class="k">Injected dose</div><div class="v" id="rDose">100%</div></div>
+        <div><div class="k">Cortical SUVR</div><div class="v" id="rSuvr">1.26</div></div>
+        <div><div class="k">Noise (CoV)</div><div class="v" id="rCov">2.9%</div></div>
+      </div>
+      <p class="fignote">Illustrative simulation, not patient data. Counts fall with dose, so noise in the
+        reference ROI rises as 1/&radic;dose and the cortical SUVR becomes harder to trust. Measuring
+        that trade-off properly — on real list-mode detector events, by bootstrap resampling — is
+        what my UCL work does.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="research"><div class="wrap sec">
+  <div class="rail">
+    <div class="idx">01</div>
+    <h2>Research</h2>
+    <p class="sub">Five threads, from detector physics to deployed tools. Click any to open.</p>
+  </div>
+  <div>
+
+    <article class="proj reveal">
+      <button class="proj-head" aria-expanded="true" aria-controls="p1">
+        <span class="yr">2026</span>
+        <span class="ttl">
+          <h3>Low-dose amyloid PET and the limits of certainty</h3>
+          <span class="sum">How little tracer dose and scan time does a reliable amyloid measurement actually need?</span>
+        </span>
+        <span class="tog" aria-hidden="true">+</span>
+      </button>
+      <div class="proj-body" id="p1">
+        <ul>
+          <li>Built an end-to-end reconstruction pipeline for an <b>Insight46</b> cohort subset
+            ([<sup>18</sup>F]florbetapir PET/MR, Siemens Biograph mMR), working from <b>raw list-mode
+            detector events</b> with NiftyPET — over <b>12,000 GPU reconstructions</b> on UCL's HPC cluster.</li>
+          <li>Designed an uncertainty-quantification study of short-frame imaging, combining temporal
+            subsampling with <b>Poisson bootstrap resampling</b> of list-mode events across
+            <b>~11,000 independent image realisations</b>, separating statistical noise from real signal change.</li>
+          <li>Fine-tuned a <b>cross-tracer deep-learning denoising model</b> and evaluated it on held-out
+            subjects against an empirically measured noise floor rather than an arbitrary baseline.</li>
+          <li>Regional quantification with GIF parcellation in native PET space, validated against an
+            independent reconstruction of the same cohort — isolating the separate contributions of
+            acquisition window, attenuation map and processing.</li>
+          <li>Engineered the infrastructure: resumable HPC array jobs with GPU pre-flight checks,
+            automated QC, interactive reporting dashboards, and reproducible notebooks — including
+            fixing faults found in the reconstruction toolchain itself.</li>
+        </ul>
+        <div class="tags"><span class="tag">NiftyPET</span><span class="tag">list-mode</span><span class="tag">Poisson bootstrap</span><span class="tag">PyTorch</span><span class="tag">HPC / CUDA</span><span class="tag">GIF parcellation</span></div>
+      </div>
+    </article>
+
+    <article class="proj reveal">
+      <button class="proj-head" aria-expanded="false" aria-controls="p2">
+        <span class="yr">2025–</span>
+        <span class="ttl">
+          <h3>WebMRIQC — quality control without a supercomputer</h3>
+          <span class="sum">MRI quality metrics in the browser, in 5–10 minutes, over an ordinary connection.</span>
+        </span>
+        <span class="tog" aria-hidden="true">+</span>
+      </button>
+      <div class="proj-body" id="p2" hidden>
+        <ul>
+          <li>MRIQC is the field standard for automated MRI quality assessment and it assumes an HPC
+            cluster. Most African sites have neither the cluster nor the bandwidth. <b>WebMRIQC removes
+            that dependency entirely.</b></li>
+          <li>Browser-based implementation with <b>DICOM-to-BIDS conversion</b> built in; automated
+            extraction of <b>SNR, CNR, FD, DVARS</b> and related metrics; <b>5–10 min</b> per T1 volume
+            over a standard internet connection.</li>
+          <li>Adopted by the <b>SWiM Program 2026</b>. Accepted to <b>MICCAI MIRASOL 2026</b>; this was
+            my undergraduate final thesis.</li>
+        </ul>
+        <div class="tags"><span class="tag">MRIQC</span><span class="tag">BIDS</span><span class="tag">web deployment</span><span class="tag">Python</span></div>
+        <p style="margin-top:14px"><a href="https://webmriqc.mailab.io/" target="_blank" rel="noopener">Open WebMRIQC ↗</a></p>
+      </div>
+    </article>
+
+    <article class="proj reveal">
+      <button class="proj-head" aria-expanded="false" aria-controls="p3">
+        <span class="yr">2022–25</span>
+        <span class="ttl">
+          <h3>Does MIRAI hold in Africa?</h3>
+          <span class="sum">External validation of a Western-trained breast cancer risk model on African mammography.</span>
+        </span>
+        <span class="tog" aria-hidden="true">+</span>
+      </button>
+      <div class="proj-body" id="p3" hidden>
+        <ul>
+          <li>Led external validation of the <b>MIRAI</b> deep learning risk-prediction model, in
+            collaboration with <b>MIT CSAIL</b> — a distribution-shift study on populations the model
+            never saw in training.</li>
+          <li>Secured ethical approval and curated datasets from <b>3,325 patients</b> across
+            <b>six healthcare institutions</b>, identifying <b>89</b> high-quality paired scans suitable
+            for validation.</li>
+          <li>Diagnosed and resolved the <b>view-position metadata gaps</b> that were materially degrading
+            model performance — an unglamorous fix that decided the result.</li>
+          <li>Funded by a <b>₦6M ACTS Foundation grant</b>; awarded the <b>MICCAI Open Data Large Grant
+            (2026)</b> to publish the curated datasets openly.</li>
+        </ul>
+        <div class="tags"><span class="tag">MIRAI</span><span class="tag">distribution shift</span><span class="tag">mammography</span><span class="tag">DICOM</span><span class="tag">open data</span></div>
+      </div>
+    </article>
+
+    <article class="proj reveal">
+      <button class="proj-head" aria-expanded="false" aria-controls="p4">
+        <span class="yr">2024–</span>
+        <span class="ttl">
+          <h3>Segmentation under real constraints</h3>
+          <span class="sum">Transformer segmentation for glioma and for ultra-low-field MRI, on African data.</span>
+        </span>
+        <span class="tog" aria-hidden="true">+</span>
+      </button>
+      <div class="proj-body" id="p4" hidden>
+        <ul>
+          <li>Led a <b>12-member team</b> to a Dice score of <b>0.73</b> for adult glioma segmentation at
+            <b>MICCAI BraTS-Africa 2024</b> (Marrakesh), applying Vision Transformers with U-Net
+            (<b>Swin-UNETR</b>), transfer learning and domain adaptation. Won a competitive travel award.</li>
+          <li>Competed in the <b>LISA-MICCAI</b> challenge on hippocampal and basal ganglia segmentation
+            in <b>ultra-low-field MRI</b> — the field strength most available across the continent.
+            Second author on the resulting Springer proceedings paper.</li>
+          <li>Now Deep Learning Research Coordinator at <b>CAMERA MRI Africa / SPARK Academy</b>, directing
+            experimental design and model implementation for the group's segmentation projects.</li>
+        </ul>
+        <div class="tags"><span class="tag">Swin-UNETR</span><span class="tag">Vision Transformers</span><span class="tag">domain adaptation</span><span class="tag">ultra-low-field</span></div>
+      </div>
+    </article>
+
+    <article class="proj reveal">
+      <button class="proj-head" aria-expanded="false" aria-controls="p5">
+        <span class="yr">2024–</span>
+        <span class="ttl">
+          <h3>CONNExIN — reproducible functional and perfusion pipelines</h3>
+          <span class="sum">rs-fMRI and cerebrovascular reactivity analysis that runs on a laptop and a browser tab.</span>
+        </span>
+        <span class="tog" aria-hidden="true">+</span>
+      </button>
+      <div class="proj-body" id="p5" hidden>
+        <ul>
+          <li>Designed <b>rs-fMRI preprocessing, analysis and cerebrovascular reactivity (CVR) mapping</b>
+            pipelines for CONNExIN, validated against the <b>PREVENT-AD</b> reference dataset.</li>
+          <li>Built to run in <b>Neurodesk containers on Google Colab</b>, so a researcher without
+            institutional compute can reproduce the full analysis.</li>
+          <li>Presented as an <b>oral at ISMRM Africa 2025</b> (Tunis) and at <b>AAIC 2025</b> (Toronto),
+            with a lightning oral at AAIC Neuroscience Next 2026.</li>
+        </ul>
+        <div class="tags"><span class="tag">rs-fMRI</span><span class="tag">CVR mapping</span><span class="tag">Neurodesk</span><span class="tag">reproducibility</span></div>
+      </div>
+    </article>
+
+  </div>
+</div></section>
+
+<section id="ucl"><div class="wrap sec">
+  <div class="rail">
+    <div class="idx">02</div>
+    <h2>UCL residency</h2>
+    <p class="sub">Jul–Sep 2026. MANIFOLD Lab, Hawkes Institute &amp; Queen Square Institute of Neurology.</p>
+  </div>
+  <div>
+    <p style="font-size:1.04rem;max-width:62ch">Supervised by <b>Prof David Cash</b>, <b>Prof James Cole</b>
+      and <b>Dr Udunna Anazodo</b>, with support from Confidence Raymond, and funded by the UCL Hawkes
+      Institute. The PET work was the reason for going. Most of what I took away happened away from the code.</p>
+    <div class="gal reveal" style="margin-top:26px">
+      <figure class="tall" data-cap="At the UCL portico" data-sub="Visiting researcher, Hawkes Institute &amp; Queen Square Institute of Neurology, summer 2026">
+        <img src="img/ucl-portico.jpg" alt="Philip Nkwam standing in front of the UCL portico during the UCL200 anniversary" loading="lazy">
+        <figcaption><b>UCL, summer 2026</b><span>Visiting researcher</span></figcaption>
+      </figure>
+      <figure class="tall" data-cap="Low-dose PET reconstruction at the desk" data-sub="Comparing full-dose, 10% dose and deep-learning-restored reconstructions of the same subject, with SUVR readouts">
+        <img src="img/pet-desk.jpg" alt="Philip at his UCL desk with amyloid PET reconstructions at different dose levels on the monitor" loading="lazy">
+        <figcaption><b>Reconstruction bench</b><span>Full dose vs 10% vs restored</span></figcaption>
+      </figure>
+      <figure class="tall" data-cap="UCL Hawkes Seminar" data-sub="&ldquo;African Dementia Research from the Ground Up: Tools Built, Lessons Learned, and What Next.&rdquo;">
+        <img src="img/hawkes-seminar.jpg" alt="Seminar room at UCL with the title slide of Philip Nkwam's Hawkes Seminar talk on screen" loading="lazy">
+        <figcaption><b>Hawkes Seminar</b><span>Invited talk, 2026</span></figcaption>
+      </figure>
+      <figure data-cap="With Prof Frederik Barkhof" data-sub="Reading low-field and high-field MRI cases at the Dementia Research Centre">
+        <img src="img/frederik-barkhof.jpg" alt="Philip Nkwam with Professor Frederik Barkhof" loading="lazy">
+        <figcaption><b>Prof Frederik Barkhof</b><span>Reading MRI cases</span></figcaption>
+      </figure>
+      <figure data-cap="With Prof Rimona Weil" data-sub="A day in clinic at UCLH, following the stage-wise diagnosis of Lewy body and Parkinson's disease dementia">
+        <img src="img/rimona-weil.jpg" alt="Philip Nkwam with Professor Rimona Weil" loading="lazy">
+        <figcaption><b>Prof Rimona Weil</b><span>UCLH clinic</span></figcaption>
+      </figure>
+      <figure data-cap="With Prof Henrik Zetterberg" data-sub="Fluid biomarkers — met at the Alzheimer's Association International Conference">
+        <img src="img/henrik-zetterberg.jpg" alt="Philip Nkwam with Professor Henrik Zetterberg" loading="lazy">
+        <figcaption><b>Prof Henrik Zetterberg</b><span>AAIC 2026</span></figcaption>
+      </figure>
+      <figure class="wide" data-cap="The MANIFOLD Lab" data-sub="The group that hosted me at UCL — learning what each of them was building was one of the best parts of the stay">
+        <img src="img/manifold-lab.jpg" alt="The MANIFOLD Lab group photographed together at Kew Gardens" loading="lazy">
+        <figcaption><b>MANIFOLD Lab</b><span>The group that hosted me</span></figcaption>
+      </figure>
+      <figure class="wide" data-cap="Presenting to the Image Quality Transfer team" data-sub="At the invitation of Dr Henry Tregidgo, Dr Matteo Figini and Prof Daniel Alexander">
+        <img src="img/iqt-team.jpg" alt="Video call with the UCL Image Quality Transfer team during Philip's presentation" loading="lazy">
+        <figcaption><b>IQT team</b><span>Invited presentation</span></figcaption>
+      </figure>
+    </div>
+
+    <div class="rows" style="margin-top:30px">
+      <div class="row"><div class="w">Clinic</div><div class="c">Shadowed <b>Dr Rimona Weil</b> at UCLH<span class="s">The stage-wise diagnostic process for Lewy body and Parkinson's disease dementia.</span></div></div>
+      <div class="row"><div class="w">Reading</div><div class="c">Low- and high-field MRI with <b>Prof Frederik Barkhof</b><span class="s">And normative hippocampal case review with Dr Martina Bocchetta.</span></div></div>
+      <div class="row"><div class="w">Methods</div><div class="c">Normative modelling with <b>Dr Neil Oxtoby</b>; ultra-fast MR and B-RAPID with <b>Prof Geoff Parker</b>'s group<span class="s">Plus brain-dedicated PET instrumentation (Positrigo), and meeting Dr Pawel Markiewicz, whose NiftyPET the project runs on.</span></div></div>
+      <div class="row"><div class="w">Spoke</div><div class="c">UCL Hawkes Seminar, and to the Image Quality Transfer team<span class="s">&ldquo;African Dementia Research from the Ground Up: Tools Built, Lessons Learned, and What Next.&rdquo;</span></div></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="publications"><div class="wrap sec">
+  <div class="rail">
+    <div class="idx">03</div>
+    <h2>Publications</h2>
+    <p class="sub">Two journal manuscripts under review; eleven abstracts and papers. Filter by type.</p>
+  </div>
+  <div>
+    <div class="filters" role="group" aria-label="Filter publications">
+      <button class="fbtn" data-f="all" aria-pressed="true">All</button>
+      <button class="fbtn" data-f="peer" aria-pressed="false">Peer-reviewed</button>
+      <button class="fbtn" data-f="review" aria-pressed="false">Under review</button>
+      <button class="fbtn" data-f="first" aria-pressed="false">First author</button>
+      <button class="fbtn" data-f="senior" aria-pressed="false">Senior author</button>
+    </div>
+    <div id="pubList"></div>
+    <p class="pubcount" id="pubCount"></p>
+    <p style="margin-top:14px;font-size:.88rem">
+      Full list on <a href="https://scholar.google.ca/citations?hl=en&user=UDNxJ8oAAAAJ" target="_blank" rel="noopener">Google Scholar</a>
+      and <a href="https://www.researchgate.net/profile/Philip-Nkwam" target="_blank" rel="noopener">ResearchGate</a>.
+    </p>
+  </div>
+</div></section>
+
+<section id="leadership"><div class="wrap sec">
+  <div class="rail">
+    <div class="idx">04</div>
+    <h2>Leadership</h2>
+    <p class="sub">Building the community the research needs, and the people who will run it.</p>
+  </div>
+  <div>
+    <div class="gal reveal" style="margin-bottom:20px">
+      <figure class="wide" style="grid-column:1/-1;aspect-ratio:21/9"
+        data-cap="ISTAART Ambassadors, AAIC 2026" data-sub="The ambassador cohort at the Alzheimer's Association International Conference, London — 43 ambassadors across 35 countries">
+        <img src="img/aaic-istaart.jpg" alt="The ISTAART ambassador cohort photographed together at AAIC 2026 in London" loading="lazy">
+        <figcaption><b>ISTAART Ambassadors, AAIC 2026</b><span>London — the cohort I direct</span></figcaption>
+      </figure>
+    </div>
+    <div class="lead">
+      <div class="card reveal">
+        <div class="org">Alzheimer's Association ISTAART &middot; Apr 2026 – present</div>
+        <h3>Global Lead Ambassador</h3>
+        <p>Selected from <b>350+ international applicants</b> as the first undergraduate and first African
+          to lead the programme. I direct 43 ambassadors across 35 countries, most at doctoral or
+          postdoctoral level, coordinate scientific sessions at AAIC, and co-organised AAIC Neuroscience
+          Next 2026 Nigeria. I wrote the programme's guide for incoming ambassadors so the role outlasts
+          whoever holds it.</p>
+        <div class="stats">
+          <div><div class="f">43</div><div class="l">ambassadors directed</div></div>
+          <div><div class="f">35</div><div class="l">countries</div></div>
+          <div><div class="f">350+</div><div class="l">applicants, one place</div></div>
+          <div><div class="f">13k</div><div class="l">AAIC attendees</div></div>
+        </div>
+      </div>
+
+      <div class="card reveal">
+        <div class="org">Founded 2025 &middot; College of Medicine, University of Lagos</div>
+        <h3>Brain-AID</h3>
+        <p>My institution had no neuroimaging analysis training and no research programme at all. I
+          started Brain-AID in my penultimate undergraduate year to pass on the training, software
+          skills and conference exposure I had gained through international collaborations, to students
+          who had no other route to them. It now has <b>350+ members across 74 institutions in 5
+          countries</b>, with members presenting at national and international conferences, and is
+          formally recognised by the College of Medicine.</p>
+        <div class="stats">
+          <div><div class="f">350+</div><div class="l">members</div></div>
+          <div><div class="f">74</div><div class="l">institutions</div></div>
+          <div><div class="f">5</div><div class="l">countries</div></div>
+          <div><div class="f">2025</div><div class="l">founded as an undergraduate</div></div>
+        </div>
+      </div>
+
+      <div class="card reveal">
+        <div class="org">ISTAART Neuroimaging PIA &middot; Jul 2026 – present</div>
+        <h3>Early Career Representative, Executive Committee</h3>
+        <p>One of two early-career representatives on the committee governing <b>1,870 neuroimaging
+          researchers across 72 countries</b> — the largest ISTAART community. I contribute to AAIC
+          programme planning, the convening of the Alzheimer's Imaging Consortium, and the PIA's
+          science communication team.</p>
+      </div>
+
+      <div class="card reveal">
+        <div class="org">Teaching &amp; peer review</div>
+        <h3>Training the next cohort</h3>
+        <p>Designed and delivered a machine learning and advanced analytics curriculum at The Bulb
+          Africa, mentoring over <b>150 fellows</b> (2021–2024). Co-authored the report on CAMERA's
+          programme training <b>105 African clinicians and students</b> in open neuroimaging analysis.
+          Mentor at Leverrs; Campus Lead for Data Science Nigeria (2021–2023). Reviewer for
+          <b>MICCAI MIRASOL 2026</b> and the <b>NeurIPS 2026 Africa in AI</b> affinity event.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:1.1rem;margin-top:34px">Awards &amp; grants</h3>
+    <div class="rows">
+      <div class="row"><div class="w">2026</div><div class="c">ISMRM E.K. Zavoisky Stipend Award</div></div>
+      <div class="row"><div class="w">2026</div><div class="c">MICCAI Open Data Large Grant<span class="s">To publish curated African mammography datasets openly.</span></div></div>
+      <div class="row"><div class="w">2025</div><div class="c">Overall Best Graduating Student, Research Category — College of Medicine, University of Lagos<span class="s">Three awards: College of Medicine, Navon Pharmaceuticals, and the Alumni Association.</span></div></div>
+      <div class="row"><div class="w">2024</div><div class="c">CAMERA MRI Africa travel award to MICCAI, Marrakesh</div></div>
+      <div class="row"><div class="w">2022</div><div class="c">₦6M ACTS Foundation Grant<span class="s">Mammography data collection and quality assurance.</span></div></div>
+      <div class="row"><div class="w">2021</div><div class="c">AWS BugBust Re:Invent Challenge — contributor, Guinness World Record</div></div>
+    </div>
+
+    <h3 style="font-size:1.1rem;margin-top:34px">Selected talks</h3>
+    <div class="rows">
+      <div class="row"><div class="w">2026</div><div class="c">UCL Hawkes Seminar — <i>African Dementia Research from the Ground Up</i><span class="s">Invited. Also presented to UCL's Image Quality Transfer team.</span></div></div>
+      <div class="row"><div class="w">2025</div><div class="c">ISMRM Africa, Tunis — oral presentation<span class="s">Reproducible and resource-efficient rs-fMRI pipelines for dementia research.</span></div></div>
+      <div class="row"><div class="w">2024</div><div class="c"><a href="https://digitalhealthaidata.com/speakers-2024/" target="_blank" rel="noopener">Digital Health AI + Data, Birmingham</a> — selected speaker</div></div>
+      <div class="row"><div class="w">2024</div><div class="c"><a href="https://294b023325a344a68bf3a45c17d7b80a.sessionize.com/session/695634" target="_blank" rel="noopener">DataFest Africa</a> — <i>Building optimised AI models in low-resource settings</i></div></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="contact"><div class="wrap sec">
+  <div class="rail">
+    <div class="idx">05</div>
+    <h2>Contact</h2>
+    <p class="sub">Open to PhD positions and collaborations in quantitative neuroimaging.</p>
+  </div>
+  <div>
+    <p style="font-size:1.08rem;max-width:58ch">I'm looking for doctoral work on dose-, time- and
+      hardware-efficient quantitative neuroimaging — reconstruction and uncertainty-aware models that
+      hold their accuracy when acquisition time, tracer dose, field strength or compute are constrained,
+      and that report what they don't know.</p>
+    <div class="mailrow">
+      <code id="mail">philipnkwam@gmail.com</code>
+      <button id="copyBtn">Copy</button>
+    </div>
+    <div class="ctas">
+      <a class="btn solid" href="https://www.linkedin.com/in/nkwam-philip/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" href="https://scholar.google.ca/citations?hl=en&user=UDNxJ8oAAAAJ" target="_blank" rel="noopener">Google Scholar</a>
+      <a class="btn" href="https://www.researchgate.net/profile/Philip-Nkwam" target="_blank" rel="noopener">ResearchGate</a>
+      <a class="btn" href="https://github.com/NkwamPhilip" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <footer>
+      <span>Philip Nkwam — Lagos, Nigeria</span>
+      <span class="sp">Last updated October 2026</span>
+    </footer>
+  </div>
+</div></section>
+
+<div id="lb" hidden>
+  <button id="lbClose" aria-label="Close image">✕</button>
+  <div>
+    <img id="lbImg" src="" alt="">
+    <p class="lbcap" id="lbCap"></p>
+  </div>
+</div>
+
+<script>
+document.documentElement.classList.add('js');
+
+/* ---------------- theme ---------------- */
+var root = document.documentElement;
+try{ var sv = localStorage.getItem('pn-theme'); if(sv) root.setAttribute('data-theme', sv); }catch(e){}
+document.getElementById('themeBtn').addEventListener('click', function(){
+  var cur = root.getAttribute('data-theme');
+  if(!cur){ cur = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
+  var next = cur === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  try{ localStorage.setItem('pn-theme', next); }catch(e){}
+  drawPET();
+});
+
+/* ---------------- Fig 1: dose / noise simulation ---------------- */
+var cv = document.getElementById('doseCanvas'), cx = cv.getContext('2d');
+var N = cv.width, base = null, isCtx = null, isRef = null;
+
+/* The phantom is defined directly in SUVR units: white matter reference = 1.00,
+   cortical ribbon = 1.50 (an amyloid-positive pattern), ventricles = 0.25.
+   Noise is measured in a texture-free white-matter ROI, the way PET noise is
+   normally quoted, so the readout reflects counting statistics and not anatomy. */
+var ROI = { x:0.500, y:0.690, r:0.052 };   /* canvas fractions, posterior white matter */
+
+function vnoise(x, y){
+  return 0.5 + 0.22*Math.sin(x*0.055 + 1.3)*Math.cos(y*0.047 - 0.6)
+             + 0.14*Math.sin(x*0.021 - y*0.027 + 2.1);
+}
+function buildPhantom(){
+  base   = new Float32Array(N*N);
+  isCtx  = new Uint8Array(N*N);
+  isRef  = new Uint8Array(N*N);
+  var cxp = N*0.5, cyp = N*0.52, rx = N*0.355, ry = N*0.295;
+  var rx0 = ROI.x*N, ry0 = ROI.y*N, rr = ROI.r*N;
+  for(var y=0; y<N; y++){
+    for(var x=0; x<N; x++){
+      var dx = (x-cxp)/rx, dy = (y-cyp)/ry, r = Math.sqrt(dx*dx+dy*dy), v = 0, cortex = false;
+      if(r <= 1.0){
+        v = 1.00;                                        /* white matter = reference */
+        if(r > 0.74){                                    /* cortical ribbon */
+          var t = Math.min(1,(r-0.74)/0.17);
+          v = 1.00 + 0.50*Math.sin(Math.PI*Math.min(1,t*1.25));
+          if(t > 0.18 && t < 0.95) cortex = true;
+        }
+        var sd = Math.sqrt(Math.pow((x-cxp)/(N*0.11),2) + Math.pow((y-cyp+N*0.02)/(N*0.085),2));
+        if(sd < 1) v = Math.max(v, 1.30 - 0.12*sd);      /* subcortical grey */
+        var vl = Math.sqrt(Math.pow((x-cxp+N*0.055)/(N*0.035),2) + Math.pow((y-cyp+N*0.01)/(N*0.085),2));
+        var vr = Math.sqrt(Math.pow((x-cxp-N*0.055)/(N*0.035),2) + Math.pow((y-cyp+N*0.01)/(N*0.085),2));
+        if(vl < 1 || vr < 1){ v = 0.25; cortex = false; } /* ventricles */
+
+        var inRoi = Math.sqrt(Math.pow(x-rx0,2) + Math.pow(y-ry0,2)) <= rr;
+        if(inRoi){ v = 1.00; isRef[y*N+x] = 1; }          /* uniform reference ROI */
+        else { v *= (0.93 + 0.11*vnoise(x,y)); }          /* mild texture elsewhere */
+
+        if(r > 0.96) v *= (1 - (r-0.96)/0.04);            /* soften the edge */
+        if(cortex) isCtx[y*N+x] = 1;
+      }
+      base[y*N+x] = Math.max(0, v);
+    }
+  }
+}
+buildPhantom();
+
+/* PET hot-metal / jet style scale */
+var STOPS = [[0,[6,10,38]],[0.24,[16,46,124]],[0.46,[20,124,190]],[0.62,[36,180,156]],
+             [0.74,[176,206,66]],[0.87,[238,160,30]],[1,[198,42,20]]];
+function ramp(t){
+  t = t<0?0:t>1?1:t;
+  for(var i=1;i<STOPS.length;i++){
+    if(t <= STOPS[i][0]){
+      var a = STOPS[i-1], b = STOPS[i], f = (t-a[0])/(b[0]-a[0]);
+      return [a[1][0]+(b[1][0]-a[1][0])*f, a[1][1]+(b[1][1]-a[1][1])*f, a[1][2]+(b[1][2]-a[1][2])*f];
+    }
+  }
+  return STOPS[STOPS.length-1][1];
+}
+
+var g1 = null;
+function gauss(){                       /* Box–Muller, cached pair */
+  if(g1 !== null){ var g = g1; g1 = null; return g; }
+  var u = Math.random()||1e-9, v = Math.random();
+  var m = Math.sqrt(-2*Math.log(u));
+  g1 = m*Math.sin(2*Math.PI*v);
+  return m*Math.cos(2*Math.PI*v);
+}
+
+/* Counts at SUVR 1.0 for a full-dose scan. 1/sqrt(lambda) then gives ~2.9% noise
+   at 100% dose and ~13% at 5%, which is the 1/sqrt(dose) behaviour that matters. */
+var COUNTS_AT_UNITY = 1200;
+var dose = 1.0;
+
+function drawPET(){
+  var img = cx.createImageData(N,N), d = img.data;
+  var scale = COUNTS_AT_UNITY * dose;
+  var sumC = 0, nC = 0, sumR = 0, sumR2 = 0, nR = 0;
+  for(var i=0;i<N*N;i++){
+    var b = base[i], val = b;
+    if(b > 0.0001){
+      var lam = b * scale;                       /* expected counts in this voxel */
+      val = b + Math.sqrt(lam)/scale * gauss();  /* Gaussian approximation to Poisson */
+      if(val < 0) val = 0;                       /* non-negativity, as in real reconstruction */
+    }
+    if(isCtx[i]){ sumC += val; nC++; }
+    if(isRef[i]){ sumR += val; sumR2 += val*val; nR++; }
+    var c = ramp(val/1.70), o = i*4;
+    d[o] = c[0]; d[o+1] = c[1]; d[o+2] = c[2]; d[o+3] = 255;
+  }
+  cx.putImageData(img,0,0);
+
+  var mC = nC ? sumC/nC : 0, mR = nR ? sumR/nR : 1;
+  var sdR = nR ? Math.sqrt(Math.max(0, sumR2/nR - mR*mR)) : 0;
+  var cov  = mR > 0.02 ? (sdR/mR)*100 : 0;
+  var suvr = mR > 0.02 ? mC/mR : 0;
+
+  /* mark the reference ROI so it is clear where noise is measured */
+  cx.save();
+  cx.strokeStyle = 'rgba(255,255,255,.78)'; cx.lineWidth = 1.4; cx.setLineDash([4,3]);
+  cx.beginPath(); cx.arc(ROI.x*N, ROI.y*N, ROI.r*N, 0, Math.PI*2); cx.stroke();
+  cx.setLineDash([]);
+  cx.fillStyle = 'rgba(255,255,255,.8)';
+  cx.font = '500 11px ui-monospace, monospace';
+  cx.textAlign = 'center';
+  cx.fillText('ref ROI', ROI.x*N, (ROI.y+ROI.r)*N + 15);
+  cx.restore();
+
+  document.getElementById('rDose').textContent = Math.round(dose*100) + '%';
+  var se = document.getElementById('rSuvr'), ce = document.getElementById('rCov');
+  se.textContent = suvr.toFixed(2);
+  ce.textContent = cov.toFixed(1) + '%';
+  se.className = 'v' + (cov > 10 ? ' warn' : '');
+  ce.className = 'v' + (cov > 10 ? ' warn' : '');
+}
+drawPET();
+
+var range = document.getElementById('doseRange');
+range.addEventListener('input', function(){ dose = +range.value/100; drawPET(); });
+
+/* drag anywhere on the image to scrub dose */
+var dragging = false;
+function scrub(ev){
+  var r = cv.getBoundingClientRect();
+  var p = (ev.clientX - r.left) / r.width;
+  p = p < 0 ? 0 : p > 1 ? 1 : p;
+  var v = Math.round(2 + p*98);
+  range.value = v; dose = v/100; drawPET();
+}
+cv.addEventListener('pointerdown', function(e){ dragging = true; cv.setPointerCapture(e.pointerId); scrub(e); });
+cv.addEventListener('pointermove', function(e){ if(dragging) scrub(e); });
+cv.addEventListener('pointerup', function(){ dragging = false; });
+cv.addEventListener('pointercancel', function(){ dragging = false; });
+
+/* ---------------- research accordions ---------------- */
+document.querySelectorAll('.proj-head').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var open = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!open));
+    document.getElementById(btn.getAttribute('aria-controls')).hidden = open;
+  });
+});
+
+/* ---------------- publications ---------------- */
+var PUBS = [
+ {t:"Automated Pediatric Brain Hippocampal and Basal Ganglia Segmentation in Ultra-Low Field Magnetic Resonance Images",
+  a:"Musa T, <b>Nkwam P</b>, Sharma A.", v:"LISA Workshop, MICCAI 2025, South Korea", em:"Springer proceedings",
+  u:"https://link.springer.com/chapter/10.1007/978-3-032-14417-1_9", k:["peer"], badge:"peer"},
+ {t:"Decentralizing Dementia Research Capacity in Sub-Saharan Africa: Evaluation of the AAIC Neuroscience Next Nigeria – Nnewi Hub",
+  a:"Ogbuagu C, <b>Nkwam P</b>, Nyame I, Koech D, Okereke U, Ogbuagu E, Edelmayer R, Nicholson T, Ismail O, Onyike CU, Uwakwe R.",
+  v:"Alzheimer's &amp; Dementia: The Journal of the Alzheimer's Association", em:"under review", k:["review"], badge:"review"},
+ {t:"Investing in the Next Generation: A Call to Action for Early-Career Researchers in Global Dementia Research",
+  a:"Botero-Rodríguez F, Brady JJR, Booncharoen K, Edwards AJ, Egerton R, Fernández Zaionz A, Fornari C, Harput E, Keller G, Mundada NS, Olajide T, Pedersen TJ, Rosales-Leycegui F, Natarajan SG, Sidhu R, Tamayanti WD, Valeriano-Lorenzo E, Vo-Eckerle TT, Watson J, <b>Nkwam P</b>, Woodruff SS, Ismail O.",
+  v:"Alzheimer's &amp; Dementia: The Journal of the Alzheimer's Association", em:"under review", k:["review"], badge:"review"},
+ {t:"Reproducible and Resource-Efficient rs-fMRI Analysis Pipelines for Dementia Research in Low-Resource Settings",
+  a:"<b>Nkwam P</b>, Draper E, Cakmak J, Fajardo A, Kanagasabai K, Tham C, Akinwale O, Aremu O, Donkor Anita N, Umoren C, Raymond C, Dako F, Anazodo U, Mohamed AZ.",
+  v:"ISMRM Africa Conference 2025, Tunis", em:"oral presentation",
+  u:"https://www.youtube.com/watch?v=TU92zJjCguc", k:["first"]},
+ {t:"Reproducible Neuroimaging Analysis Pipelines for Dementia Research in Resource-Limited Settings: Experience with fMRI Processing and Analysis",
+  a:"<b>Nkwam P</b>, Draper E, Cakmak J, Fajardo A, Kanagasabai K, Tham C, Akinwale O, Umoren C, Aremu O, Donkor Anita N, Raymond C, Dako F, Anazodo U, Mohamed AZ.",
+  v:"AAIC 2025, Toronto; lightning oral, AAIC Neuroscience Next 2026",
+  u:"https://scholar.google.ca/citations?view_op=view_citation&hl=en&user=UDNxJ8oAAAAJ&citation_for_view=UDNxJ8oAAAAJ:UeHWp8X0CEIC", k:["first"]},
+ {t:"WebMRIQC: A Web-Based Implementation of MRIQC for Accessible MRI Image Quality Assessment in Resource-Constrained Settings",
+  a:"<b>Nkwam P</b>, Oladeji I, Zurakat-Aderibigbe S, Cakmak J, Aduluwa H, Raymond C, Mokua C, Zubair AA, Champanda D, Olusuyi T, Adewole M, Anazodo U.",
+  v:"MICCAI MIRASOL 2026", em:"undergraduate final thesis",
+  u:"https://drive.google.com/file/d/1lFqyB-Ef1ICg3dOUFMI3Ax777JAgcjWt/view?usp=sharing", k:["first"]},
+ {t:"Improving Breast Cancer Detection in Nigeria with MIRAI Deep Learning Model",
+  a:"<b>Nkwam P</b>, Amure I, Adewole M, Isibor V, Gbadamosi Y, Usman A, Shinkafi-Bagudu Z, Animasahun M, Ndoh K.",
+  v:"15th AORTIC International Conference on Cancer in Africa 2025, Tunisia",
+  u:"https://drive.google.com/file/d/1IbM-f5k-k_M-SGff2L8qt87zb--0ivk6/view?usp=sharing", k:["first"]},
+ {t:"Benchmarking Swin-UNETR for brain tumour segmentation on sub-Saharan African datasets: advancing performance in low-resource settings",
+  a:"Ajanaku J, Makinde E, Olufayo H, <b>Nkwam P</b>.", v:"ARN Conference 2025, Lagos", em:"senior author",
+  u:"https://drive.google.com/file/d/1ZcLwvMPwNmcyAQvOROD9AibvvxNgEYt6/view?usp=sharing", k:["senior"]},
+ {t:"Towards Reproducible and Resource-Efficient Perfusion Imaging Analysis for African Dementia Imaging Research",
+  a:"Tham C, Aduluwa H, Draper E, Cakmak J, Fajardo A, Akinwale O, Kanagasabai K, <b>Nkwam P</b>, et al.",
+  v:"AAIC 2025, Toronto",
+  u:"https://scholar.google.ca/citations?view_op=view_citation&hl=en&user=UDNxJ8oAAAAJ&citation_for_view=UDNxJ8oAAAAJ:d1gkVwhDpl0C", k:[]},
+ {t:"CONNExIN: Advancing Reproducible Perfusion Imaging Analysis for African Neuroscientists",
+  a:"Tham C, Draper E, Cakmak JD, Fajardo A, Akinwale O, <b>Nkwam P</b>, et al.",
+  v:"ISMRM Workshop 2025, Spain",
+  u:"https://cds.ismrm.org/protected/Perfusion25/abstracts/Tham.pdf", k:[]},
+ {t:"Training 105 African clinicians and students in open neuroimaging analysis: CAMERA's dementia research program",
+  a:"Draper EC, Kanagasabai K, Tham C, Akinwale O, Fajardo A, Hough M, Halilibrahimoğlu H, Soula O, Montalba CA, et al., <b>Nkwam PE</b>, Mohamed AZ, Anazodo U.",
+  v:"ISMRM 2026, Cape Town",
+  u:"https://drive.google.com/file/d/1P74AyYZoqytrxCzDOSiDBaG9Lzv3cusc/view?usp=sharing", k:[]},
+ {t:"Automated Segmentation of Pediatric Hippocampal and Basal Ganglia Structures in Ultra-Low-Field Magnetic Resonance Images",
+  a:"Musa T, <b>Nkwam P</b>, Sharma A.", v:"ISMRM 2026, Cape Town",
+  u:"https://drive.google.com/file/d/1WGWEBYYQ45ymM-Vlt1v0bQa5C110BDLz/view?usp=sharing", k:[]},
+ {t:"Quantifying Amyloid Burden in Alzheimer's: A Reproducible Centiloid Pipeline for Analysis in Resource-Constrained Settings",
+  a:"Oladeji DA, Adeniyi AT, Anene-Ogbe CM, Babari BMF, Nwasike NC, Ibe CK, Nkenganyi-Aka E, Akinmuleya OI, Anazodo U, Mohamed AZ, Draper E, <b>Nkwam P</b>, Fajardo A.",
+  v:"AAIC 2026", em:"supervised",
+  u:"https://drive.google.com/file/d/11rJnjzyKPyq-XjFXMUHMr3z2s-_hgmhm/view?usp=sharing", k:[]}
+];
+var listEl = document.getElementById('pubList'), countEl = document.getElementById('pubCount');
+function render(filter){
+  var n = 0, html = '';
+  PUBS.forEach(function(p){
+    if(filter !== 'all' && p.k.indexOf(filter) === -1) return;
+    n++;
+    var badge = p.badge === 'peer' ? '<span class="badge b-pr">Peer-reviewed</span>'
+              : p.badge === 'review' ? '<span class="badge b-rev">Under review</span>' : '';
+    var title = p.u ? '<a href="'+p.u+'" target="_blank" rel="noopener">'+p.t+'</a>' : p.t;
+    html += '<div class="pub"><div class="n">'+String(n).padStart(2,'0')+'</div><div>'
+          + '<div class="t">'+badge+title+'</div>'
+          + '<div class="au">'+p.a+'</div>'
+          + '<div class="ven">'+p.v+(p.em ? ' &middot; <span class="em">'+p.em+'</span>' : '')+'</div>'
+          + '</div></div>';
+  });
+  listEl.innerHTML = html;
+  countEl.textContent = n + (n === 1 ? ' entry' : ' entries') + (filter === 'all' ? '' : ' — filtered');
+}
+render('all');
+document.querySelectorAll('.fbtn').forEach(function(b){
+  b.addEventListener('click', function(){
+    document.querySelectorAll('.fbtn').forEach(function(o){ o.setAttribute('aria-pressed','false'); });
+    b.setAttribute('aria-pressed','true');
+    render(b.dataset.f);
+  });
+});
+
+/* ---------------- lightbox ---------------- */
+var lb = document.getElementById('lb'), lbImg = document.getElementById('lbImg'), lbCap = document.getElementById('lbCap');
+document.querySelectorAll('.gal figure').forEach(function(f){
+  f.addEventListener('click', function(){
+    var im = f.querySelector('img');
+    lbImg.src = im.src; lbImg.alt = im.alt;
+    lbCap.innerHTML = '<b>'+f.dataset.cap+'</b><span>'+f.dataset.sub+'</span>';
+    lb.hidden = false;
+  });
+});
+function closeLb(){ lb.hidden = true; lbImg.src = ''; }
+document.getElementById('lbClose').addEventListener('click', closeLb);
+lb.addEventListener('click', function(e){ if(e.target === lb || e.target.tagName === 'DIV') closeLb(); });
+addEventListener('keydown', function(e){ if(e.key === 'Escape' && !lb.hidden) closeLb(); });
+
+/* ---------------- reveal on scroll (transform only — nothing is ever invisible) ---------------- */
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window){
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, {rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+} else {
+  document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+}
+
+/* ---------------- copy email ---------------- */
+document.getElementById('copyBtn').addEventListener('click', function(){
+  var btn = this, txt = document.getElementById('mail').textContent;
+  function done(){ btn.textContent = 'Copied'; setTimeout(function(){ btn.textContent = 'Copy'; }, 1600); }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done).catch(select);
+  } else { select(); }
+  function select(){
+    var r = document.createRange(); r.selectNodeContents(document.getElementById('mail'));
+    var s = getSelection(); s.removeAllRanges(); s.addRange(r);
+    btn.textContent = 'Select & copy'; setTimeout(function(){ btn.textContent = 'Copy'; }, 2200);
+  }
+});
+</script>
+</body>
+</html>
