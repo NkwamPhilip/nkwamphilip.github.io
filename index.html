@@ -35,13 +35,6 @@
   --font-mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
   --maxw:1180px;
 }
-@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
-  --bg:#0E1117; --surface:#161B23; --surface-2:#1C222C; --surface-3:#232A36;
-  --fg:#E7EBF1; --muted:#98A2B4; --faint:#6E7889; --rule:#272E3A;
-  --primary:#8FB3E0; --primary-soft:#A8C5EA; --accent:#E0A058; --hot:#E0714A;
-  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
-  color-scheme:dark;
-}}
 :root[data-theme="dark"]{
   --bg:#0E1117; --surface:#161B23; --surface-2:#1C222C; --surface-3:#232A36;
   --fg:#E7EBF1; --muted:#98A2B4; --faint:#6E7889; --rule:#272E3A;
@@ -95,22 +88,13 @@ h1 em{font-style:italic;color:var(--primary)}
 .affil span{font-size:.82rem;color:var(--faint)}
 @media (max-width:900px){ .hero-grid{grid-template-columns:1fr;gap:38px;padding-block:40px} }
 
-/* ---------- dose figure ---------- */
-.figure{background:var(--surface);border:1px solid var(--rule);border-radius:4px;overflow:hidden;box-shadow:var(--shadow)}
-.figure .cap{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
-  padding:11px 14px;border-bottom:1px solid var(--rule);background:var(--surface-2)}
-.figure .body{padding:14px}
-#doseCanvas{width:100%;height:auto;aspect-ratio:1/1;background:#06080f;border-radius:3px;display:block;cursor:ew-resize;touch-action:none}
-.readout{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:12px;background:var(--rule);
-  border:1px solid var(--rule);border-radius:3px;overflow:hidden}
-.readout div{background:var(--surface);padding:9px 10px}
-.readout .k{font-family:var(--font-mono);font-size:.63rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
-.readout .v{font-family:var(--font-mono);font-size:1.02rem;font-weight:500;color:var(--fg);font-variant-numeric:tabular-nums;margin-top:3px}
-.readout .v.warn{color:var(--hot)}
-.slider-row{display:flex;align-items:center;gap:12px;margin-top:14px}
-.slider-row label{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);flex:none}
-input[type=range]{flex:1;min-width:0;accent-color:var(--accent);height:22px;cursor:ew-resize}
-.fignote{font-size:.74rem;color:var(--faint);margin-top:11px;line-height:1.5}
+/* ---------- hero portrait ---------- */
+.hero-portrait{margin:0;position:relative;border-radius:4px;overflow:hidden;border:1px solid var(--rule);
+  background:var(--surface-2);box-shadow:var(--shadow)}
+.hero-portrait img{width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;object-position:center 32%}
+.hero-portrait figcaption{position:absolute;inset:auto 0 0 0;padding:30px 14px 12px;font-size:.78rem;line-height:1.4;
+  color:#fff;background:linear-gradient(to top,rgba(8,12,20,.9),rgba(8,12,20,.5) 60%,transparent)}
+@media (max-width:900px){ .hero-portrait img{aspect-ratio:16/10;object-position:center 28%} }
 
 /* ---------- sections ---------- */
 section{border-bottom:1px solid var(--rule)}
@@ -266,7 +250,7 @@ img{max-width:100%}
 
 <section id="hero"><div class="wrap hero-grid">
   <div>
-    <div class="eyebrow"><span class="dot"></span><span class="mono">Computational imaging &middot; Lagos, Nigeria</span></div>
+    <div class="eyebrow"><span class="dot"></span><span class="mono">Quantitative PET &amp; MRI &middot; Reconstruction &amp; uncertainty</span></div>
     <h1>Making quantitative brain imaging work <em>where the scanners aren't</em>.</h1>
     <p class="lede">I work on reconstruction, uncertainty quantification and deep learning for
       <strong>PET and MRI</strong> — and on the tools and training that let African researchers
@@ -285,29 +269,10 @@ img{max-width:100%}
     </div>
   </div>
 
-  <div class="figure reveal">
-    <div class="cap">
-      <span class="mono">Fig. 1 — Dose &amp; noise</span>
-      <span class="mono" style="color:var(--accent)">Drag</span>
-    </div>
-    <div class="body">
-      <canvas id="doseCanvas" width="420" height="420" role="img"
-        aria-label="Interactive simulation of an amyloid PET slice reconstructed at varying injected dose"></canvas>
-      <div class="slider-row">
-        <label for="doseRange">Dose</label>
-        <input id="doseRange" type="range" min="2" max="100" value="100" step="1" aria-label="Simulated injected dose, percent">
-      </div>
-      <div class="readout">
-        <div><div class="k">Injected dose</div><div class="v" id="rDose">100%</div></div>
-        <div><div class="k">Cortical SUVR</div><div class="v" id="rSuvr">1.26</div></div>
-        <div><div class="k">Noise (CoV)</div><div class="v" id="rCov">2.9%</div></div>
-      </div>
-      <p class="fignote">Illustrative simulation, not patient data. Counts fall with dose, so noise in the
-        reference ROI rises as 1/&radic;dose and the cortical SUVR becomes harder to trust. Measuring
-        that trade-off properly — on real list-mode detector events, by bootstrap resampling — is
-        what my UCL work does.</p>
-    </div>
-  </div>
+  <figure class="hero-portrait reveal">
+    <img src="img/ucl-portico.jpg" alt="Philip Nkwam at the UCL portico during the UCL200 anniversary" loading="eager">
+    <figcaption>UCL, summer 2026 — visiting researcher, Hawkes Institute &amp; Queen Square Institute of Neurology</figcaption>
+  </figure>
 </div></section>
 
 <section id="research"><div class="wrap sec">
@@ -635,7 +600,7 @@ img{max-width:100%}
       <a class="btn" href="https://github.com/NkwamPhilip" target="_blank" rel="noopener">GitHub</a>
     </div>
     <footer>
-      <span>Philip Nkwam — Lagos, Nigeria</span>
+      <span>Philip Nkwam</span>
       <span class="sp">Last updated October 2026</span>
     </footer>
   </div>
@@ -661,145 +626,7 @@ document.getElementById('themeBtn').addEventListener('click', function(){
   var next = cur === 'dark' ? 'light' : 'dark';
   root.setAttribute('data-theme', next);
   try{ localStorage.setItem('pn-theme', next); }catch(e){}
-  drawPET();
 });
-
-/* ---------------- Fig 1: dose / noise simulation ---------------- */
-var cv = document.getElementById('doseCanvas'), cx = cv.getContext('2d');
-var N = cv.width, base = null, isCtx = null, isRef = null;
-
-/* The phantom is defined directly in SUVR units: white matter reference = 1.00,
-   cortical ribbon = 1.50 (an amyloid-positive pattern), ventricles = 0.25.
-   Noise is measured in a texture-free white-matter ROI, the way PET noise is
-   normally quoted, so the readout reflects counting statistics and not anatomy. */
-var ROI = { x:0.500, y:0.690, r:0.052 };   /* canvas fractions, posterior white matter */
-
-function vnoise(x, y){
-  return 0.5 + 0.22*Math.sin(x*0.055 + 1.3)*Math.cos(y*0.047 - 0.6)
-             + 0.14*Math.sin(x*0.021 - y*0.027 + 2.1);
-}
-function buildPhantom(){
-  base   = new Float32Array(N*N);
-  isCtx  = new Uint8Array(N*N);
-  isRef  = new Uint8Array(N*N);
-  var cxp = N*0.5, cyp = N*0.52, rx = N*0.355, ry = N*0.295;
-  var rx0 = ROI.x*N, ry0 = ROI.y*N, rr = ROI.r*N;
-  for(var y=0; y<N; y++){
-    for(var x=0; x<N; x++){
-      var dx = (x-cxp)/rx, dy = (y-cyp)/ry, r = Math.sqrt(dx*dx+dy*dy), v = 0, cortex = false;
-      if(r <= 1.0){
-        v = 1.00;                                        /* white matter = reference */
-        if(r > 0.74){                                    /* cortical ribbon */
-          var t = Math.min(1,(r-0.74)/0.17);
-          v = 1.00 + 0.50*Math.sin(Math.PI*Math.min(1,t*1.25));
-          if(t > 0.18 && t < 0.95) cortex = true;
-        }
-        var sd = Math.sqrt(Math.pow((x-cxp)/(N*0.11),2) + Math.pow((y-cyp+N*0.02)/(N*0.085),2));
-        if(sd < 1) v = Math.max(v, 1.30 - 0.12*sd);      /* subcortical grey */
-        var vl = Math.sqrt(Math.pow((x-cxp+N*0.055)/(N*0.035),2) + Math.pow((y-cyp+N*0.01)/(N*0.085),2));
-        var vr = Math.sqrt(Math.pow((x-cxp-N*0.055)/(N*0.035),2) + Math.pow((y-cyp+N*0.01)/(N*0.085),2));
-        if(vl < 1 || vr < 1){ v = 0.25; cortex = false; } /* ventricles */
-
-        var inRoi = Math.sqrt(Math.pow(x-rx0,2) + Math.pow(y-ry0,2)) <= rr;
-        if(inRoi){ v = 1.00; isRef[y*N+x] = 1; }          /* uniform reference ROI */
-        else { v *= (0.93 + 0.11*vnoise(x,y)); }          /* mild texture elsewhere */
-
-        if(r > 0.96) v *= (1 - (r-0.96)/0.04);            /* soften the edge */
-        if(cortex) isCtx[y*N+x] = 1;
-      }
-      base[y*N+x] = Math.max(0, v);
-    }
-  }
-}
-buildPhantom();
-
-/* PET hot-metal / jet style scale */
-var STOPS = [[0,[6,10,38]],[0.24,[16,46,124]],[0.46,[20,124,190]],[0.62,[36,180,156]],
-             [0.74,[176,206,66]],[0.87,[238,160,30]],[1,[198,42,20]]];
-function ramp(t){
-  t = t<0?0:t>1?1:t;
-  for(var i=1;i<STOPS.length;i++){
-    if(t <= STOPS[i][0]){
-      var a = STOPS[i-1], b = STOPS[i], f = (t-a[0])/(b[0]-a[0]);
-      return [a[1][0]+(b[1][0]-a[1][0])*f, a[1][1]+(b[1][1]-a[1][1])*f, a[1][2]+(b[1][2]-a[1][2])*f];
-    }
-  }
-  return STOPS[STOPS.length-1][1];
-}
-
-var g1 = null;
-function gauss(){                       /* Box–Muller, cached pair */
-  if(g1 !== null){ var g = g1; g1 = null; return g; }
-  var u = Math.random()||1e-9, v = Math.random();
-  var m = Math.sqrt(-2*Math.log(u));
-  g1 = m*Math.sin(2*Math.PI*v);
-  return m*Math.cos(2*Math.PI*v);
-}
-
-/* Counts at SUVR 1.0 for a full-dose scan. 1/sqrt(lambda) then gives ~2.9% noise
-   at 100% dose and ~13% at 5%, which is the 1/sqrt(dose) behaviour that matters. */
-var COUNTS_AT_UNITY = 1200;
-var dose = 1.0;
-
-function drawPET(){
-  var img = cx.createImageData(N,N), d = img.data;
-  var scale = COUNTS_AT_UNITY * dose;
-  var sumC = 0, nC = 0, sumR = 0, sumR2 = 0, nR = 0;
-  for(var i=0;i<N*N;i++){
-    var b = base[i], val = b;
-    if(b > 0.0001){
-      var lam = b * scale;                       /* expected counts in this voxel */
-      val = b + Math.sqrt(lam)/scale * gauss();  /* Gaussian approximation to Poisson */
-      if(val < 0) val = 0;                       /* non-negativity, as in real reconstruction */
-    }
-    if(isCtx[i]){ sumC += val; nC++; }
-    if(isRef[i]){ sumR += val; sumR2 += val*val; nR++; }
-    var c = ramp(val/1.70), o = i*4;
-    d[o] = c[0]; d[o+1] = c[1]; d[o+2] = c[2]; d[o+3] = 255;
-  }
-  cx.putImageData(img,0,0);
-
-  var mC = nC ? sumC/nC : 0, mR = nR ? sumR/nR : 1;
-  var sdR = nR ? Math.sqrt(Math.max(0, sumR2/nR - mR*mR)) : 0;
-  var cov  = mR > 0.02 ? (sdR/mR)*100 : 0;
-  var suvr = mR > 0.02 ? mC/mR : 0;
-
-  /* mark the reference ROI so it is clear where noise is measured */
-  cx.save();
-  cx.strokeStyle = 'rgba(255,255,255,.78)'; cx.lineWidth = 1.4; cx.setLineDash([4,3]);
-  cx.beginPath(); cx.arc(ROI.x*N, ROI.y*N, ROI.r*N, 0, Math.PI*2); cx.stroke();
-  cx.setLineDash([]);
-  cx.fillStyle = 'rgba(255,255,255,.8)';
-  cx.font = '500 11px ui-monospace, monospace';
-  cx.textAlign = 'center';
-  cx.fillText('ref ROI', ROI.x*N, (ROI.y+ROI.r)*N + 15);
-  cx.restore();
-
-  document.getElementById('rDose').textContent = Math.round(dose*100) + '%';
-  var se = document.getElementById('rSuvr'), ce = document.getElementById('rCov');
-  se.textContent = suvr.toFixed(2);
-  ce.textContent = cov.toFixed(1) + '%';
-  se.className = 'v' + (cov > 10 ? ' warn' : '');
-  ce.className = 'v' + (cov > 10 ? ' warn' : '');
-}
-drawPET();
-
-var range = document.getElementById('doseRange');
-range.addEventListener('input', function(){ dose = +range.value/100; drawPET(); });
-
-/* drag anywhere on the image to scrub dose */
-var dragging = false;
-function scrub(ev){
-  var r = cv.getBoundingClientRect();
-  var p = (ev.clientX - r.left) / r.width;
-  p = p < 0 ? 0 : p > 1 ? 1 : p;
-  var v = Math.round(2 + p*98);
-  range.value = v; dose = v/100; drawPET();
-}
-cv.addEventListener('pointerdown', function(e){ dragging = true; cv.setPointerCapture(e.pointerId); scrub(e); });
-cv.addEventListener('pointermove', function(e){ if(dragging) scrub(e); });
-cv.addEventListener('pointerup', function(){ dragging = false; });
-cv.addEventListener('pointercancel', function(){ dragging = false; });
 
 /* ---------------- research accordions ---------------- */
 document.querySelectorAll('.proj-head').forEach(function(btn){
