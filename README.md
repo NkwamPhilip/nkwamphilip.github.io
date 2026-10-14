@@ -1,7 +1,7 @@
 # nkwamphilip.github.io
 
-Personal research site — Philip Nkwam. Static: one HTML file, nine images, no build step
-and no dependencies. Google Fonts is the only external request.
+Personal research site — Philip Nkwam. Static: one HTML file, a folder of photos, no build
+step and no dependencies. Google Fonts is the only external request.
 
 ```
 index.html      the whole site (styles and script inline)
@@ -38,19 +38,24 @@ git add . && git commit -m "Update" && git push
 
 ## Editing notes
 
-- **Colours and fonts** are CSS custom properties in the `:root` block at the top of
-  `<style>`. Both light and dark themes are defined there; change a token once and it
-  propagates. Dark values appear twice on purpose (a `prefers-color-scheme` block and a
-  `[data-theme="dark"]` block) so the manual toggle works in both directions.
-- **Publications** live in the `PUBS` array in the script near the bottom. Each entry is
-  `{t: title, a: authors, v: venue, em: emphasis, u: url, k: [filter keys], badge: ...}`.
-  Filter keys are `peer`, `review`, `first`, `senior`. Add an entry and it appears
-  automatically, numbering and counts included.
-- **Figure 1** is a simulation, not patient data. The phantom is defined in SUVR units
-  (white matter reference = 1.00, cortical ribbon peaks at 1.50, ventricles = 0.25).
-  Noise is Poisson, approximated by a Gaussian, measured inside the dashed reference ROI
-  so the readout reflects counting statistics rather than anatomy — it scales as
-  1/sqrt(dose), which is the point of the figure. `COUNTS_AT_UNITY` sets the full-dose
-  noise level (1200 counts gives ~2.9%).
-- **Photo captions** are `data-cap` and `data-sub` attributes on each `<figure>`; the
-  lightbox reads them.
+- **Look**: dark, terminal-style, one page. Colours and fonts are CSS custom properties in
+  the `:root` block at the top of `<style>` (JetBrains Mono for structure, Work Sans for
+  reading). There is no light theme.
+- **Sections** are numbered `01`–`10` in the HTML; the script renumbers whichever are
+  visible, so adding or removing a section keeps the numbers in order.
+- **Links**: every person and organisation named in running text is an `<a class="hl">`
+  (mono) or `<a class="lk">` (body font) with a dotted underline. UCL people link to their
+  `profiles.ucl.ac.uk` pages.
+- **Features** (`#features`) holds press about you; the first card is the highlighted one.
+- **Story** (`#story`) is the photo timeline. Each chapter is an `<li>` with a
+  `.ph-row` of `<figure class="ph" style="--ar:W/H">`. Set `--ar` to the photo's
+  width ÷ height and the row's `--sum` to the total of its `--ar` values; photos in a row
+  then come out the same height. Add `pair` to two portraits that should sit side by side
+  on a phone. The lightbox walks every story photo in page order.
+- **Academic view** (`?view=academic`, the header button) hides the hero, about, story,
+  skills, experience and impact, and shows the short bio in `.ac-hero` followed by
+  publications, projects, features, news and contact.
+- **CV**: drop a file named `cv.pdf` in this folder and the `cv.pdf` buttons appear on
+  their own; without it they stay hidden.
+- **Portrait**: `img/portrait.jpg` is a square crop of `phil.png` (the desk photo with the PET
+  scans on screen). `img/lowdose-pet.png` is the low-dose PET slice used for that project.
